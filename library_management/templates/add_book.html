@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add a New Book</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            background-color: #f4f7f6;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            padding: 25px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #2A855B;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+            width: 100%;
+            text-align: left;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        input[type="text"]:focus,
+        input[type="file"]:focus {
+            border-color: #3AA674;
+            outline: none;
+            box-shadow: 0 0 5px rgba(58, 166, 116, 0.3);
+        }
+
+        .button {
+            width: 100%;
+            padding: 12px;
+            background-color: #3AA674;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+            border: none;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .button:hover {
+            background-color: #2A855B;
+            transform: translateY(-2px);
+        }
+
+        .actions {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #ccc;
+            color: #333;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        .back-button:hover {
+            background-color: #999;
+            transform: translateY(-2px);
+        }
+
+        @media screen and (max-width: 600px) {
+            .container {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Add a New Book</h1>
+        <form method="POST" action="/add_book" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="title">📖 Title:</label>
+                <input type="text" name="title" placeholder="Enter book title" required>
+            </div>
+
+            <div class="form-group">
+                <label for="author">✍️ Author:</label>
+                <input type="text" name="author" placeholder="Enter author's name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="isbn">🔢 ISBN:</label>
+                <input type="text" name="isbn" placeholder="Enter ISBN number" required>
+            </div>
+
+            <div class="form-group">
+                <label for="cover_image">📷 Cover Image:</label>
+                <input type="file" name="cover_image" accept="image/*">
+            </div>
+
+            <button type="submit" class="button">📚 Add Book</button>
+        </form>
+
+        <div class="actions">
+            <a href="/books" class="back-button">← Back to Book List</a>
+        </div>
+    </div>
+</body>
+</html>

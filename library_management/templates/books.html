@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Books</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #3AA674;
+            margin-top: 20px;
+        }
+
+        .button {
+            display: inline-block;
+            margin: 5px;
+            padding: 10px 20px;
+            background-color: #3AA674;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #2A855B;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        .search-container input[type="text"] {
+            width: 400px;
+            height: 40px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .search-container button {
+            height: 40px;
+            padding: 0 20px;
+            font-size: 16px;
+        }
+
+        table {
+            width: 90%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            text-align: left;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #3AA674;
+            color: white;
+            cursor: pointer;
+        }
+
+        th:hover {
+            background-color: #2A855B;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .action-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .checkout-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkout-row input[type="text"] {
+            flex: 1;
+            max-width: 200px;
+        }
+
+        .checkout-row button {
+            white-space: nowrap;
+        }
+
+        img {
+            max-width: 100px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Book List</h1>
+
+    <!-- Actions Section -->
+    <div class="actions">
+        <a href="/" class="button">Home</a>
+        <a href="/add_book" class="button">Add a New Book</a>
+    </div>
+
+    <!-- Search Section -->
+    <form method="POST" action="/books" class="search-container">
+        <input type="text" name="search" placeholder="Search by Title or ISBN">
+        <button type="submit" class="button">Search</button>
+        <button type="submit" name="show_all" value="1" class="button">Show All</button>
+    </form>
+
+    <!-- Books Table -->
+    <table id="books-table">
+        <thead>
+            <tr>
+                <th onclick="sortTable(0)">Title</th>
+                <th onclick="sortTable(1)">Author</th>
+                <th onclick="sortTable(2)">ISBN</th>
+                <th>Cover</th>
+                <th onclick="sortTable(4)">Status</th>
+                <th onclick="sortTable(5)">Borrower</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in books %}
+            <tr>
+                <td>{{ book['title'] }}</td>
+                <td>{{ book['author'] }}</td>
+                <td>{{ book['isbn'] }}</td>
+                <td>
+                    {% if book['cover_image'] %}
+                        <img src="{{ url_for('static', filename='uploads/' ~ book['cover_image']) }}" alt="Cover Image">
+                    {% else %}
+                        No Image
+                    {% endif %}
+                </td>
+                <td>
+                    {% if book['is_checked_out'] %}
+                        Checked Out
+                    {% else %}
+                        Available
+                    {% endif %}
+                </td>
+                <td>
+                    {% if book['borrower_name'] %}
+                        {{ book['borrower_name'] }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>
+                    <div class="action-container">
+                        <form method="POST" action="/toggle_checkout/{{ book['id'] }}" class="checkout-row">
+                            {% if book['is_checked_out'] %}
+                                <button type="submit" class="button">Return</button>
+                            {% else %}
+                                <input type="text" name="borrower_name" placeholder="Borrower Name" required>
+                                <button type="submit" class="button">Check Out</button>
+                            {% endif %}
+                        </form>
+                        <form method="POST" action="/delete_book/{{ book['id'] }}">
+                            <button type="submit" class="button" onclick="return confirm('Are you sure you want to delete this book?');">Delete</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Sorting Script -->
+    <script>
+        function sortTable(columnIndex) {
+            const table = document.getElementById("books-table");
+            const rows = Array.from(table.rows).slice(1); // ヘッダーを除く
+            const ascending = table.getAttribute("data-sort-asc") !== "true"; // 昇順/降順切り替え
+            table.setAttribute("data-sort-asc", ascending);
+
+            rows.sort((a, b) => {
+                const cellA = a.cells[columnIndex].textContent.trim();
+                const cellB = b.cells[columnIndex].textContent.trim();
+                return ascending
+                    ? cellA.localeCompare(cellB)
+                    : cellB.localeCompare(cellA);
+            });
+
+            rows.forEach(row => table.tBodies[0].appendChild(row));
+        }
+    </script>
+</body>
+</html>
