@@ -1,0 +1,101 @@
+:root {
+    --primary-color: #3AA674;
+    --primary-dark: #2A855B;
+    --secondary-color: #4CAF50;
+    --background-light: #f4f7f6;
+    --text-color: #2c3e50;
+    --text-muted: #6c757d;
+    --white: #ffffff;
+    --border-soft: #e6e9eb;
+    --shadow-subtle: rgba(0, 0, 0, 0.08);
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: var(--background-light);
+    color: var(--text-color);
+    line-height: 1.7;
+}
+
+.header {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    color: var(--white);
+    padding: 20px;
+    box-shadow: 0 2px 10px var(--shadow-subtle);
+}
+
+.button {
+    background-color: var(--primary-color);
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 6px var(--shadow-subtle);
+}
+
+.button:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+}
+
+table {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px var(--shadow-subtle);
+}
+
+table th {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+table tr:nth-child(even) {
+    background-color: rgba(58, 166, 116, 0.05);
+}
+
+table tr:hover {
+    background-color: rgba(58, 166, 116, 0.1);
+    transition: background-color 0.2s ease;
+}
+
+.form-container {
+    border-radius: 12px;
+    box-shadow: 0 6px 20px var(--shadow-subtle);
+    background: var(--white);
+    border: 1px solid var(--border-soft);
+}
+
+input[type="text"], 
+input[type="file"] {
+    border: 1px solid var(--border-soft);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+input[type="text"]:focus, 
+input[type="file"]:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(58, 166, 116, 0.15);
+}
+
+@media screen and (max-width: 768px) {
+    .container {
+        padding: 10px;
+        border-radius: 0;
+    }
+}
+
+/* 追加の洗練されたディテール */
+.search-container input {
+    border-radius: 20px;
+    padding: 10px 15px;
+}
+
+img {
+    transition: transform 0.3s ease;
+    border-radius: 6px;
+}
+
+img:hover {
+    transform: scale(1.05);
+}
